@@ -15,7 +15,7 @@ namespace Prayer.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.JoelV1;RajeshV2;Srini;Sandeep";
+            ViewBag.Message = "Your application description page.JoelV1;RajeshV2;Srini;Sandeep;AnushaV2;Jyothsna,ee;";
 
             return View();
         }
