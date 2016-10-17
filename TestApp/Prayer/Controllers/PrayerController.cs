@@ -18,7 +18,7 @@ namespace Prayer.Controllers
         {
             PrayerRequestBusinessLayer prayer = new PrayerRequestBusinessLayer();
             prayer.Saveprayer((PrayerRequest)p);
-            return View("Prayer");
+            return View("Default");
         }   
     }
 }
