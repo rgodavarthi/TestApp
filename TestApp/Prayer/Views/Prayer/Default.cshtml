@@ -1,4 +1,7 @@
-﻿
+﻿@using Prayer.Models;
+@using Prayer.Controllers;
+@model PrayerRequestList
+
 @{
     ViewBag.Title = "";
 }
@@ -30,7 +33,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                @foreach(PrayerRequest prayer in Model.GetPrayers)
+                {
+                    <tr>
+                        <td>@prayer.SubmittedBy</td>
+                        <td>@prayer.PrayerText</td>
+                        <td>@prayer.SubmittedDate</td>
+                    </tr>
+                }
+                @*<tr>
                     <td>Rajesh</td>
                     <td>Sunitha's dry cough healing</td>
                     <td>10/12/2016</td>
@@ -44,7 +55,7 @@
                     <td>Raja Ramesh</td>
                     <td>H1B approval</td>
                     <td>10/11/2016</td>
-                </tr>
+                </tr>*@
             </tbody>
         </table>
     </div>

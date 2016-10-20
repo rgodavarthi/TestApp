@@ -170,6 +170,7 @@
     </Compile>
     <Compile Include="Models\PrayerRequest.cs" />
     <Compile Include="Models\PrayerRequestBusinessLayer.cs" />
+    <Compile Include="Models\PrayerRequestList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

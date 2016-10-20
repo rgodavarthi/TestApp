@@ -12,13 +12,20 @@ namespace Prayer.Controllers
         // GET: Prayer
         public ActionResult Default()
         {
-            return View();
+            PrayerRequestBusinessLayer prayer = new PrayerRequestBusinessLayer();
+            List<PrayerRequest> prayers = prayer.GetPrayers();
+            PrayerRequestList prayerRequestList = new PrayerRequestList();
+            prayerRequestList.GetPrayers = prayers;
+            return View("Default", prayerRequestList);
         }
         public ActionResult SavePrayer(PrayerRequest p, string Btnsubmit)
         {
             PrayerRequestBusinessLayer prayer = new PrayerRequestBusinessLayer();
             prayer.Saveprayer((PrayerRequest)p);
-            return View("Default");
+            List<PrayerRequest> prayers = prayer.GetPrayers();
+            PrayerRequestList prayerRequestList = new PrayerRequestList();
+            prayerRequestList.GetPrayers = prayers;
+            return View("Default", prayerRequestList);
         }   
     }
 }
