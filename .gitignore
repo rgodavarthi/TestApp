@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/TestApp/Prayer/Prayer.csproj.user
+/TestApp/Prayer/Prayer.config
+/TestApp/Prayer/Prayer.csproj
+/TestApp/Prayer/Web.config
+/TestApp/Prayer.v12.suo
