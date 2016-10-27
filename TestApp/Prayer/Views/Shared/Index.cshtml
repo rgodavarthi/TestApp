@@ -5,53 +5,92 @@
     ViewBag.Title = "";
 }
 
-<div class="container">
-    <div class="jumbotron">
-        <h1>ISCF Prayer Application</h1>
-        <p class="lead">In all things we learn to give our supplications to God, knowing He hears our prayers.</p>
-    </div>
-    <!--<div class="form-group">-->
-    <div>
-        <form name="prayerRequest" action="/Prayer/SavePrayer/" method="post">
-            <label for="prayerrequest">Prayer Request:</label>
-            <textarea class="form-control" rows="4" style="min-width: 100%" id="prayerrequest" name="PrayerText"></textarea> <p></p>
-            <label for="usr">Name:</label>
-            <input type="text" class="form-control" id="usr" name="SubmittedBy"> <p></p>
-            <button type="submit" class="btn btn-primary btn-block" value="BtnSubmit">Submit</button>
-        </form>
-    </div>
+@using (Html.BeginForm())
+{ 
     <div class="container">
-        <h2>Most Recent Prayer Needs</h2>
-        <p>The last 10 prayer requests for your information</p>
-        <table class="table table-bordered table-responsive">
-            <thead class="table">
-                <tr>
-                    <th>Name</th>
-                    <th>Prayer Request</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (PrayerRequestViewModel prayer in Model.GetPrayers)
-                {
-                    if(@prayer.IsNew)
-                    { 
-                        <tr class="alert-danger">
-                            <td>@prayer.SubmittedBy</td>
-                            <td>@prayer.PrayerText</td>
-                            <td>@prayer.SubmittedDate</td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr class="alert-info">
-                            <td>@prayer.SubmittedBy</td>
-                            <td>@prayer.PrayerText</td>
-                            <td>@prayer.SubmittedDate</td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
+        <!--<div class="form-group">-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">Enter Your Prayer Requests</h1>
+            </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.TextAreaFor(m => m.PrayerRequest, 5, 0, new { @class = "form-control", style = "min-width: 100%" })
+                @*<textarea class="form-control" id="txtPrayerRequest" rows="5" style="min-width: 100%"></textarea>*@
+                <label for="submittedBy">Submitted By</label>
+                <input class="form-control" id="submittedBy" type="text" />
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button id="btnSubmit" class="btn btn-sm btn-primary" data-pdsa-action="submit">
+                <i class="glyphicon glyphicon-bell"></i>
+                &nbsp; Submit
+            </button>
+            <button id="btnReset" class="btn btn-sm btn-primary" data-pdsa-action="resetsubmit">
+                <i class="glyphicon glyphicon-share-alt"></i>
+                &nbsp; Reset
+            </button>
+        </div>
     </div>
-</div>
+
+        @*<div>
+                <form name="prayerRequest" action="/Prayer/SavePrayer/" method="post">
+                    <label for="prayerrequest">Prayer Request:</label>
+                    <textarea class="form-control" rows="4" style="min-width: 100%" id="prayerrequest" name="PrayerText"></textarea> <p></p>
+                    <label for="usr">Name:</label>
+                    <input type="text" class="form-control" id="usr" name="SubmittedBy"> <p></p>
+                    <button type="submit" class="btn btn-primary btn-block" value="BtnSubmit">Submit</button>
+                    <button type="reset" class="btn btn-primary btn-block" value="BtnSubmit">Reset</button>
+                </form>
+            </div>*@
+        <div id="list">
+            <h2>Most Recent Prayer Needs</h2>
+            <p>The last 10 prayer requests for your information</p>
+            <table class="table table-bordered table-responsive">
+                <thead class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Prayer Request</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (PrayerRequestViewModel prayer in Model.GetPrayers)
+                    {
+                        if (@prayer.IsNew)
+                        {
+                            <tr class="alert-danger">
+                                <td>@prayer.SubmittedBy</td>
+                                <td>@prayer.PrayerText</td>
+                                <td>@prayer.SubmittedDate</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="alert-info">
+                                <td>@prayer.SubmittedBy</td>
+                                <td>@prayer.PrayerText</td>
+                                <td>@prayer.SubmittedDate</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+@section scripts {    
+    <script>
+        $(document).ready(function () {
+            //$("button").click(function () {
+            //    alert("Working");
+            //});
+            $("button").on("click", function (e) {
+                e.preventDefault();
+
+                $("form").submit();
+            });
+        });
+    </script>
+}
+

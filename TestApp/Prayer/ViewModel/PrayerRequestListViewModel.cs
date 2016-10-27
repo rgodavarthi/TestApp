@@ -9,5 +9,6 @@ namespace Prayer.View_Model
     public class PrayerRequestListViewModel
     {
         public List<PrayerRequestViewModel> GetPrayers { get; set;}
+        public string PrayerRequest { get; set; }
     }
 }
