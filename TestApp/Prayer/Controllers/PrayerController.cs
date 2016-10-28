@@ -49,6 +49,7 @@ namespace Prayer.Controllers
                         // Add new prayer request to the list
                         prayerRequestViewModelList.Add(new PrayerRequestViewModel()
                         {
+                            ID = prayerRequestViewModelList.Count + 1,
                             PrayerText = vml.PrayerRequest,
                             Answered = 0,
                             SubmittedBy = vml.SubmittedBy,
@@ -59,6 +60,8 @@ namespace Prayer.Controllers
                         // Save to json file
                         SavePrayerRequest();
                     }
+
+                    ModelState.Clear();
 
                     // Assign to view mode list
                     prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
@@ -97,6 +100,7 @@ namespace Prayer.Controllers
             {
                 prayerRequestViewModelList.Add(new PrayerRequestViewModel()
                 {
+                    ID = p.ID,
                     PrayerText = p.PrayerText,
                     Answered = p.Answered,
                     SubmittedBy = p.SubmittedBy,

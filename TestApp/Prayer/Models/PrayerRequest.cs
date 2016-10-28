@@ -8,7 +8,7 @@ namespace Prayer.Models
 {
     public class PrayerRequest
     {
-        //public int ID { get; set; }
+        public int ID { get; set; }
         public string PrayerText { get; set; }
         public string SubmittedBy { get; set;}
         public DateTime SubmittedDate { get; set; }

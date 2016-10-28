@@ -36,6 +36,7 @@ namespace Prayer.Models
             // Sample data set
             prayers.Add(new PrayerRequest()
                 {
+                    ID = 1,
                     PrayerText = "Pray for this country",
                     Answered = 0,
                     SubmittedBy = "Rajesh",
@@ -44,6 +45,7 @@ namespace Prayer.Models
 
             prayers.Add(new PrayerRequest()
             {
+                ID = 2,
                 PrayerText = "Pray for our kids",
                 Answered = 0,
                 SubmittedBy = "ISCF",
@@ -53,6 +55,7 @@ namespace Prayer.Models
 
             prayers.Add(new PrayerRequest()
             {
+                ID = 3,
                 PrayerText = "Pray for our leaders",
                 Answered = 0,
                 SubmittedBy = "Church",
@@ -62,28 +65,11 @@ namespace Prayer.Models
 
             prayers.Add(new PrayerRequest()
             {
+                ID = 4,
                 PrayerText = "Pray for our schools",
                 Answered = 0,
                 SubmittedBy = "Students",
                 SubmittedDate = Convert.ToDateTime("1/5/2016")
-
-            });
-
-            prayers.Add(new PrayerRequest()
-            {
-                PrayerText = "Pray for our Missionaries",
-                Answered = 0,
-                SubmittedBy = "Mission Leaders",
-                SubmittedDate = Convert.ToDateTime("10/21/2014")
-
-            });
-
-            prayers.Add(new PrayerRequest()
-            {
-                PrayerText = "Pray for our families",
-                Answered = 0,
-                SubmittedBy = "Pastors",
-                SubmittedDate = Convert.ToDateTime("10/25/2016")
 
             });
 

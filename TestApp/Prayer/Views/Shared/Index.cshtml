@@ -52,6 +52,7 @@
             <table class="table table-bordered table-responsive">
                 <thead class="table">
                     <tr>
+                        <th>No.</th>
                         <th>Name</th>
                         <th>Prayer Request</th>
                         <th>Date</th>
@@ -63,6 +64,7 @@
                         if (@prayer.IsNew)
                         {
                             <tr class="alert-danger">
+                                <td>@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
                                 <td>@prayer.SubmittedDate</td>
@@ -71,6 +73,7 @@
                         else
                         {
                             <tr class="alert-info">
+                                <td>@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
                                 <td>@prayer.SubmittedDate</td>
@@ -85,6 +88,7 @@
 @section scripts {    
     <script>
         $(document).ready(function () {
+            // submit function
             $("#btnSubmit").on("click", function (e) {
                 e.preventDefault();
                 
@@ -93,6 +97,7 @@
                 $("form").submit();
             });
 
+            // reset function
             $("#btnReset").on("click", function (e) {
                 e.preventDefault();
 
