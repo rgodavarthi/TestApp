@@ -7,6 +7,9 @@
 
 @using (Html.BeginForm())
 { 
+    <!-- Hidden fields-->
+     @Html.HiddenFor(m => m.EventData)
+    
     <div class="container">
         <!--<div class="form-group">-->
         <div class="panel panel-primary">
@@ -82,8 +85,18 @@
 @section scripts {    
     <script>
         $(document).ready(function () {
-            $("button").on("click", function (e) {
+            $("#btnSubmit").on("click", function (e) {
                 e.preventDefault();
+                
+                $("#EventData").val("submit");
+
+                $("form").submit();
+            });
+
+            $("#btnReset").on("click", function (e) {
+                e.preventDefault();
+
+                $("#EventData").val("reset");
 
                 $("form").submit();
             });

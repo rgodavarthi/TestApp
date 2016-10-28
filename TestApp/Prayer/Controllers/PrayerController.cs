@@ -35,26 +35,45 @@ namespace Prayer.Controllers
         {
             // Deserialize json data to list
             using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json"))
-            { 
+            {
                 string data = sr.ReadToEnd();
                 prayerRequestViewModelList = JsonConvert.DeserializeObject<List<PrayerRequestViewModel>>(data);
             }
+            
+            switch (vml.EventData.ToLower())
+            { 
+                case "submit":
 
-            // Add new prayer request to the list
-            prayerRequestViewModelList.Add(new PrayerRequestViewModel()
-            {
-                PrayerText = vml.PrayerRequest,
-                Answered = 0,
-                SubmittedBy = vml.SubmittedBy,
-                SubmittedDate = DateTime.Now,
-                IsNew = true
-            });
+                    if (!string.IsNullOrEmpty(vml.PrayerRequest))
+                    {
+                        // Add new prayer request to the list
+                        prayerRequestViewModelList.Add(new PrayerRequestViewModel()
+                        {
+                            PrayerText = vml.PrayerRequest,
+                            Answered = 0,
+                            SubmittedBy = vml.SubmittedBy,
+                            SubmittedDate = DateTime.Now,
+                            IsNew = true
+                        });
 
-            // Save to json file
-            SavePrayerRequest();
+                        // Save to json file
+                        SavePrayerRequest();
+                    }
 
-            // Assign to view mode list
-            prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
+                    // Assign to view mode list
+                    prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
+
+                    break;
+
+                case "reset":
+
+                    ModelState.Clear();
+
+                    // Assign prayer list data set to view model
+                    prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
+
+                    break;
+            }
 
             // Send to view
             return View("Index", prayerRequestListViewModel);
