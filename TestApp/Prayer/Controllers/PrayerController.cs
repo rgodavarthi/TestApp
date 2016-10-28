@@ -45,8 +45,8 @@ namespace Prayer.Controllers
             {
                 PrayerText = vml.PrayerRequest,
                 Answered = 0,
-                SubmittedBy = "Anonymous",
-                SubmittedDate = DateTime.Today,
+                SubmittedBy = vml.SubmittedBy,
+                SubmittedDate = DateTime.Now,
                 IsNew = true
             });
 

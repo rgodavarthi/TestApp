@@ -10,5 +10,6 @@ namespace Prayer.View_Model
     {
         public List<PrayerRequestViewModel> GetPrayers { get; set;}
         public string PrayerRequest { get; set; }
+        public string SubmittedBy { get; set; }
     }
 }
