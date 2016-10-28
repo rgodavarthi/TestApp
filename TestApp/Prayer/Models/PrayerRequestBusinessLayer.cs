@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
+using System.IO;
+using Prayer.View_Model;
 
 namespace Prayer.Models
 {
+
     class PrayerRequestBusinessLayer
     {
         public void Saveprayer(PrayerRequest P)
@@ -26,8 +30,10 @@ namespace Prayer.Models
 
         public List<PrayerRequest> GetPrayers()
         {
-            List<PrayerRequest> prayers = new List<PrayerRequest>();
+            
+            List<PrayerRequest> prayers = new List<PrayerRequest>();  
 
+            // Sample data set
             prayers.Add(new PrayerRequest()
                 {
                     PrayerText = "Pray for this country",
@@ -80,27 +86,10 @@ namespace Prayer.Models
                 SubmittedDate = Convert.ToDateTime("10/25/2016")
 
             });
-            //string query = "SELECT * FROM PrayerRequest order by 1 desc";
-            //string connectionString = "Data Source=HBMSEA-BATTAGAN;Initial Catalog=Prayer;Integrated Security=true;";
-            //SqlConnection connection = new SqlConnection(connectionString);
-            //connection.Open();
-            
-            //if (connection.State == System.Data.ConnectionState.Open)
-            //{
-            //    SqlCommand command = new SqlCommand(query);
-            //    command.Connection = connection;
-            //    SqlDataReader rd = command.ExecuteReader();
 
-            //    while (rd.Read())
-            //    {
-            //        PrayerRequest prayerRequest = new PrayerRequest();
-            //        prayerRequest.PrayerText = Convert.ToString(rd.GetSqlValue(1));
-            //        prayerRequest.SubmittedBy = Convert.ToString(rd.GetSqlValue(2));
-            //        prayerRequest.SubmittedDate = Convert.ToString(rd.GetSqlValue(3));
-            //        prayers.Add(prayerRequest);
-            //    }
-            //    connection.Close();
-            //}
+            // Creates a JSON file under App_Data folder
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json", JsonConvert.SerializeObject(prayers));
+
             return prayers;
         }
 

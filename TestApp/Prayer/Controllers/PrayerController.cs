@@ -13,28 +13,35 @@ namespace Prayer.Controllers
     public class PrayerController : Controller
     {
 
-        List<PrayerRequestViewModel> prvmlist = new List<PrayerRequestViewModel>();
+        List<PrayerRequestViewModel> prayerRequestViewModelList = new List<PrayerRequestViewModel>();
         PrayerRequestListViewModel prayerRequestListViewModel = new PrayerRequestListViewModel();
 
-        // GET: Prayer
+        // First entry point when you launch application
         public ActionResult Default()  
         {
+            // Get initial data set
             Get();
 
-            string json = JsonConvert.SerializeObject(prvmlist);
-            System.IO.File.WriteAllText(@"C:\Users\godavartra01\Source\Repos\TestApp\TestApp\Prayer\App_Data\PrayerData.json", json); 
+            // Assign prayer list data set to view model
+            prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
 
-            prayerRequestListViewModel.GetPrayers = prvmlist;
-
+            // Send to view
             return View("Index", prayerRequestListViewModel);
         }
 
+        // Entry point when you post - after adding a prayer request
         [HttpPost]
         public ActionResult Default(PrayerRequestListViewModel vml)
         {
-            Get();
+            // Deserialize json data to list
+            using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json"))
+            { 
+                string data = sr.ReadToEnd();
+                prayerRequestViewModelList = JsonConvert.DeserializeObject<List<PrayerRequestViewModel>>(data);
+            }
 
-            prvmlist.Add(new PrayerRequestViewModel()
+            // Add new prayer request to the list
+            prayerRequestViewModelList.Add(new PrayerRequestViewModel()
             {
                 PrayerText = vml.PrayerRequest,
                 Answered = 0,
@@ -43,25 +50,23 @@ namespace Prayer.Controllers
                 IsNew = true
             });
 
-            
+            // Save to json file
             SavePrayerRequest();
-            prayerRequestListViewModel.GetPrayers = prvmlist;
+
+            // Assign to view mode list
+            prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
+
+            // Send to view
             return View("Index", prayerRequestListViewModel);
         }
 
+        // Saves data to Json file
         private void SavePrayerRequest()
         {
-            //// Add to json file
-            //using (StreamReader file = System.IO.File.OpenText(@"C:\Users\godavartra01\Source\Repos\TestApp\TestApp\Prayer\App_Data\PrayerData.json")
-            //using (JsonTextReader reader = new JsonTextReader(file))
-            //{
-            //      List<PrayerRequestViewModel> vml = JsonConvert.DeserializeObject()
-            //}
-
-                string json = JsonConvert.SerializeObject(prvmlist);
-                System.IO.File.WriteAllText(@"C:\Users\godavartra01\Source\Repos\TestApp\TestApp\Prayer\App_Data\PrayerData.json", json);
+            System.IO.File.WriteAllText(@"C:\Users\godavartra01\Source\Repos\TestApp\TestApp\Prayer\App_Data\PrayerData.json", JsonConvert.SerializeObject(prayerRequestViewModelList));
         }
 
+        // Gets and sets initial data set to view model list
         private void Get()
         {
             // Get data
@@ -71,7 +76,7 @@ namespace Prayer.Controllers
             // Assign to view & viewmodel list
             foreach (PrayerRequest p in prayers)
             {
-                prvmlist.Add(new PrayerRequestViewModel()
+                prayerRequestViewModelList.Add(new PrayerRequestViewModel()
                 {
                     PrayerText = p.PrayerText,
                     Answered = p.Answered,
@@ -81,16 +86,6 @@ namespace Prayer.Controllers
                 });
             }
 
-        }
-
-        //public ActionResult SavePrayer(PrayerRequest p, string Btnsubmit)
-        //{
-        //    //PrayerRequestBusinessLayer prayer = new PrayerRequestBusinessLayer();
-        //    //prayer.Saveprayer((PrayerRequest)p);
-        //    //List<PrayerRequest> prayers = prayer.GetPrayers();
-        //    //PrayerRequestListViewModel prayerRequestList = new PrayerRequestListViewModel();
-        //    //prayerRequestList.GetPrayers = prayers;
-        //    return View("Default", prayerRequestList);
-        //}   
+        } 
     }
 }
