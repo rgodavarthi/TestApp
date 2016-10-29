@@ -68,6 +68,11 @@ namespace Prayer.Controllers
 
                     break;
 
+                case "edit":
+
+                    ModelState.Clear();
+                    break;
+
                 case "reset":
 
                     ModelState.Clear();

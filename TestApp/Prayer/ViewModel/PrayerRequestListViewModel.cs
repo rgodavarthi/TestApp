@@ -12,5 +12,6 @@ namespace Prayer.View_Model
         public string PrayerRequest { get; set; }
         public string SubmittedBy { get; set; }
         public string EventData { get; set; }
+        public string PrayerID { get; set; }
     }
 }

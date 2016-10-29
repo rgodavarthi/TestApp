@@ -8,7 +8,8 @@
 @using (Html.BeginForm())
 { 
     <!-- Hidden fields-->
-     @Html.HiddenFor(m => m.EventData)
+    @Html.HiddenFor(m => m.EventData)
+    @Html.HiddenFor(m => m.PrayerID)    
     
     <div class="container">
         <!--<div class="form-group">-->
@@ -25,11 +26,11 @@
             </div>
         </div>
         <div class="panel-footer">
-            <button id="btnSubmit" class="btn btn-sm btn-primary" data-pdsa-action="submit">
+            <button id="btnSubmit" class="btn btn-sm btn-primary">
                 <i class="glyphicon glyphicon-bell"></i>
                 &nbsp; Submit
             </button>
-            <button id="btnReset" class="btn btn-sm btn-primary" data-pdsa-action="resetsubmit">
+            <button id="btnReset" class="btn btn-sm btn-primary">
                 <i class="glyphicon glyphicon-share-alt"></i>
                 &nbsp; Reset
             </button>
@@ -49,9 +50,10 @@
         <div id="list">
             <h2>Most Recent Prayer Needs</h2>
             <p>The last 10 prayer requests for your information</p>
-            <table class="table table-bordered table-responsive">
+            <table class="table table-condensed table-bordered table-striped table-hover">
                 <thead class="table">
                     <tr>
+                        <th id="edit">Edit</th>
                         <th>No.</th>
                         <th>Name</th>
                         <th>Prayer Request</th>
@@ -64,6 +66,13 @@
                         if (@prayer.IsNew)
                         {
                             <tr class="alert-danger">
+                                <td>
+                                    <a href="#" data-pdsa-action="edit"
+                                       data-pdsa-val= "@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </a>
+                                </td>
                                 <td>@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
@@ -73,6 +82,13 @@
                         else
                         {
                             <tr class="alert-info">
+                                <td>
+                                    <a href="#" data-pdsa-action="edit"
+                                       data-pdsa-val= "@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </a>
+                                </td>
                                 <td>@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
@@ -105,6 +121,16 @@
 
                 $("form").submit();
             });
+
+            //// edit function
+            //$("table").click(function () {
+            //    alert($(this).val("data-pdsa-val").text);
+                
+            //    $("#PrayerID").val($(this).val("data-pdsa-val").text);
+            //    $("#EventData").val("edit");
+
+            //    $("form").submit();
+            //});
         });
     </script>
 }
