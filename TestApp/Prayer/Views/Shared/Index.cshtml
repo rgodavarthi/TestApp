@@ -1,0 +1,137 @@
+﻿@using Prayer.View_Model;
+@model PrayerRequestListViewModel
+
+@{
+    ViewBag.Title = "";
+}
+
+@using (Html.BeginForm())
+{ 
+    <!-- Hidden fields-->
+    @Html.HiddenFor(m => m.EventData)
+    @Html.HiddenFor(m => m.PrayerID)    
+    
+    <div class="container">
+        <!--<div class="form-group">-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">Enter Your Prayer Requests</h1>
+            </div>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.TextAreaFor(m => m.PrayerRequest, 5, 0, new { @class = "form-control", style = "min-width: 100%" })
+                <label for="submittedBy">Submitted By</label>
+                @Html.TextBoxFor(m => m.SubmittedBy, new { @class = "form-control" })
+                @*<input class="form-control" id="submittedBy" type="text" />*@
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button id="btnSubmit" class="btn btn-sm btn-primary">
+                <i class="glyphicon glyphicon-bell"></i>
+                &nbsp; Submit
+            </button>
+            <button id="btnReset" class="btn btn-sm btn-primary">
+                <i class="glyphicon glyphicon-share-alt"></i>
+                &nbsp; Reset
+            </button>
+        </div>
+    </div>
+
+        @*<div>
+                <form name="prayerRequest" action="/Prayer/SavePrayer/" method="post">
+                    <label for="prayerrequest">Prayer Request:</label>
+                    <textarea class="form-control" rows="4" style="min-width: 100%" id="prayerrequest" name="PrayerText"></textarea> <p></p>
+                    <label for="usr">Name:</label>
+                    <input type="text" class="form-control" id="usr" name="SubmittedBy"> <p></p>
+                    <button type="submit" class="btn btn-primary btn-block" value="BtnSubmit">Submit</button>
+                    <button type="reset" class="btn btn-primary btn-block" value="BtnSubmit">Reset</button>
+                </form>
+            </div>*@
+        <div id="list">
+            <h2>Most Recent Prayer Needs</h2>
+            <p>The last 10 prayer requests for your information</p>
+            <table class="table table-condensed table-bordered table-striped table-hover">
+                <thead class="table">
+                    <tr>
+                        <th id="edit">Edit</th>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Prayer Request</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (PrayerRequestViewModel prayer in Model.GetPrayers)
+                    {
+                        if (@prayer.IsNew)
+                        {
+                            <tr class="alert-danger">
+                                <td>
+                                    <a href="#" data-pdsa-action="edit"
+                                       data-pdsa-val= "@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </a>
+                                </td>
+                                <td>@prayer.ID</td>
+                                <td>@prayer.SubmittedBy</td>
+                                <td>@prayer.PrayerText</td>
+                                <td>@prayer.SubmittedDate</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="alert-info">
+                                <td>
+                                    <a href="#" data-pdsa-action="edit"
+                                       data-pdsa-val= "@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </a>
+                                </td>
+                                <td>@prayer.ID</td>
+                                <td>@prayer.SubmittedBy</td>
+                                <td>@prayer.PrayerText</td>
+                                <td>@prayer.SubmittedDate</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+@section scripts {    
+    <script>
+        $(document).ready(function () {
+            // submit function
+            $("#btnSubmit").on("click", function (e) {
+                e.preventDefault();
+                
+                $("#EventData").val("submit");
+
+                $("form").submit();
+            });
+
+            // reset function
+            $("#btnReset").on("click", function (e) {
+                e.preventDefault();
+
+                $("#EventData").val("reset");
+
+                $("form").submit();
+            });
+
+            //// edit function
+            //$("table").click(function () {
+            //    alert($(this).val("data-pdsa-val").text);
+                
+            //    $("#PrayerID").val($(this).val("data-pdsa-val").text);
+            //    $("#EventData").val("edit");
+
+            //    $("form").submit();
+            //});
+        });
+    </script>
+}
+
