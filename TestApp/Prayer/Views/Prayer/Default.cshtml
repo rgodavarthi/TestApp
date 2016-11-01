@@ -1,0 +1,62 @@
+﻿@using Prayer.Models;
+@using Prayer.Controllers;
+@model PrayerRequestList
+
+@{
+    ViewBag.Title = "";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>ISCF Prayer Application</h1>
+        <p class="lead">In all things we learn to give our supplications to God, knowing He hears our prayers.</p>
+    </div>
+    <!--<div class="form-group">-->
+       <div>
+        <form name="prayerRequest" action="/Prayer/SavePrayer/" method="post">
+        <label for="prayerrequest">Prayer Request:</label>
+        <textarea class="form-control" rows="4" style="min-width: 100%" id="prayerrequest" name="PrayerText"></textarea> <p></p>
+        <label for="usr">Name:</label>
+        <input type="text" class="form-control" id="usr" name="SubmittedBy"> <p></p>
+        <button type="submit" class="btn btn-primary btn-block" value="BtnSubmit">Submit</button>
+        </form>
+    </div>
+    <div class="container">
+        <h2>Most Recent Prayer Needs</h2>
+        <p>The last 10 prayer requests for your information</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Prayer Request</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(PrayerRequest prayer in Model.GetPrayers)
+                {
+                    <tr>
+                        <td>@prayer.SubmittedBy</td>
+                        <td>@prayer.PrayerText</td>
+                        <td>@prayer.SubmittedDate</td>
+                    </tr>
+                }
+                @*<tr>
+                    <td>Rajesh</td>
+                    <td>Sunitha's dry cough healing</td>
+                    <td>10/12/2016</td>
+                </tr>
+                <tr>
+                    <td>Sam</td>
+                    <td>Safe travels</td>
+                    <td>10/13/2016</td>
+                </tr>
+                <tr>
+                    <td>Raja Ramesh</td>
+                    <td>H1B approval</td>
+                    <td>10/11/2016</td>
+                </tr>*@
+            </tbody>
+        </table>
+    </div>
+</div>

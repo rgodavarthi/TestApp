@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Prayer";
+}
+
+<html>
+<head>
+    <title> Create Prayer Request </title>
+</head>
+<body>
+    <h1 align ="center">Prayers can stop the Storms</h1>
+    <div align ="center"><form align ="center" name ="prayerform" action="/Prayer/SavePrayer/" method="post">
+    <table>
+        <tr>
+            <td>Prayer Request </td>
+            <td><input type="text" name="PrayerText" /></td>
+            </tr>
+        <tr>
+            <td>Submitted By </td>
+            <td><input type="text" name="SubmittedBy" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="BtnSubmit"/></td>
+            <td><input type="button" value="BtnReset" /></td>
+        </tr>
+       </table>
+        </form>
+    </div>
+    </body>
+
+</html>
