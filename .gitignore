@@ -7,3 +7,4 @@
 /TestApp/Prayer/Prayer.csproj
 /TestApp/Prayer/Web.config
 /TestApp/Prayer.v12.suo
+*.config
