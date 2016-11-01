@@ -33,6 +33,8 @@ namespace Prayer.Controllers
         [HttpPost]
         public ActionResult Default(PrayerRequestListViewModel vml)
         {
+            PrayerRequestViewModel prvm = new PrayerRequestViewModel();
+            
             // Deserialize json data to list
             using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json"))
             {
@@ -70,7 +72,15 @@ namespace Prayer.Controllers
 
                 case "edit":
 
-                    ModelState.Clear();
+                    //ModelState.Clear();
+
+
+                    // Assign prayer list data set to view model
+                    prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
+                    prayerRequestListViewModel.Mode = "Edit";
+
+                    prvm = prayerRequestViewModelList.Find(prayerRequest => prayerRequest.ID.Equals(Convert.ToInt32(vml.PrayerID)));
+
                     break;
 
                 case "reset":
@@ -84,13 +94,14 @@ namespace Prayer.Controllers
             }
 
             // Send to view
+            //Tuple<List<PrayerRequestListViewModel>, PrayerRequestViewModel> tuple = new Tuple<List<PrayerRequestListViewModel>, PrayerRequestViewModel>(prayerRequestListViewModel.GetPrayers, prvm);
             return View("Index", prayerRequestListViewModel);
         }
 
         // Saves data to Json file
         private void SavePrayerRequest()
         {
-            System.IO.File.WriteAllText(@"C:\Users\godavartra01\Source\Repos\TestApp\TestApp\Prayer\App_Data\PrayerData.json", JsonConvert.SerializeObject(prayerRequestViewModelList));
+            System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json", JsonConvert.SerializeObject(prayerRequestViewModelList));
         }
 
         // Gets and sets initial data set to view model list
