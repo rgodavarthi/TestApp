@@ -13,45 +13,42 @@ namespace Prayer.Controllers
     public class PrayerController : Controller
     {
 
-        List<PrayerRequestViewModel> prayerRequestViewModelList = new List<PrayerRequestViewModel>();
-        PrayerRequestListViewModel prayerRequestListViewModel = new PrayerRequestListViewModel();
+        PrayerRequestViewModel vm = new PrayerRequestViewModel();
+        Random rnd = new Random();
 
         // First entry point when you launch application
         public ActionResult Default()  
         {
             // Get initial data set
-            Get();
-
-            // Assign prayer list data set to view model
-            prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
+            vm.Get();
 
             // Send to view
-            return View("Index", prayerRequestListViewModel);
+            return View("Index", vm);
         }
 
         // Entry point when you post - after adding a prayer request
         [HttpPost]
-        public ActionResult Default(PrayerRequestListViewModel vml)
+        public ActionResult Default(PrayerRequestViewModel vml)
         {
-            PrayerRequestViewModel prvm = new PrayerRequestViewModel();
-            
+           
             // Deserialize json data to list
             using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json"))
             {
                 string data = sr.ReadToEnd();
-                prayerRequestViewModelList = JsonConvert.DeserializeObject<List<PrayerRequestViewModel>>(data);
+                vm.PrayerRequestViewModelList = JsonConvert.DeserializeObject<List<PrayerRequestViewModel>>(data);
             }
             
             switch (vml.EventData.ToLower())
             { 
-                case "submit":
+                case "submit":               
 
-                    if (!string.IsNullOrEmpty(vml.PrayerRequest))
+                    if (!string.IsNullOrEmpty(vml.PrayerRequest) && (string.IsNullOrEmpty(vml.PrayerID)))
                     {
                         // Add new prayer request to the list
-                        prayerRequestViewModelList.Add(new PrayerRequestViewModel()
+                        vm.PrayerRequestViewModelList.Add(new PrayerRequestViewModel()
                         {
-                            ID = prayerRequestViewModelList.Count + 1,
+                            //ID = vm.PrayerRequestViewModelList.Count + 1,
+                            ID = rnd.Next(),
                             PrayerText = vml.PrayerRequest,
                             Answered = 0,
                             SubmittedBy = vml.SubmittedBy,
@@ -62,24 +59,30 @@ namespace Prayer.Controllers
                         // Save to json file
                         SavePrayerRequest();
                     }
+                    else if (!(string.IsNullOrEmpty(vml.PrayerID)))
+                    {
+                        // Update
+                        PrayerRequestViewModel vmEdit = vm.PrayerRequestViewModelList.Find(id => id.ID == Convert.ToInt32(vml.PrayerID));
+                        vmEdit.PrayerText = vml.PrayerRequest;
+                        vmEdit.SubmittedBy = vml.SubmittedBy;
+                        vmEdit.SubmittedDate = DateTime.Now;
+                        vmEdit.IsNew = true;
+
+                        // Save to json file
+                        SavePrayerRequest();
+                    }
 
                     ModelState.Clear();
 
-                    // Assign to view mode list
-                    prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
-
                     break;
 
-                case "edit":
 
-                    //ModelState.Clear();
+                case "delete":
 
+                    vm.PrayerRequestViewModelList.Remove(vm.PrayerRequestViewModelList.Find(id => id.ID == Convert.ToInt32(vml.PrayerID)));
+                    SavePrayerRequest();
 
-                    // Assign prayer list data set to view model
-                    prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
-                    prayerRequestListViewModel.Mode = "Edit";
-
-                    prvm = prayerRequestViewModelList.Find(prayerRequest => prayerRequest.ID.Equals(Convert.ToInt32(vml.PrayerID)));
+                    ModelState.Clear();
 
                     break;
 
@@ -87,44 +90,17 @@ namespace Prayer.Controllers
 
                     ModelState.Clear();
 
-                    // Assign prayer list data set to view model
-                    prayerRequestListViewModel.GetPrayers = prayerRequestViewModelList;
-
                     break;
             }
 
             // Send to view
-            //Tuple<List<PrayerRequestListViewModel>, PrayerRequestViewModel> tuple = new Tuple<List<PrayerRequestListViewModel>, PrayerRequestViewModel>(prayerRequestListViewModel.GetPrayers, prvm);
-            return View("Index", prayerRequestListViewModel);
+            return View("Index", vm);
         }
 
         // Saves data to Json file
         private void SavePrayerRequest()
         {
-            System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json", JsonConvert.SerializeObject(prayerRequestViewModelList));
+            System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json", JsonConvert.SerializeObject(vm.PrayerRequestViewModelList));
         }
-
-        // Gets and sets initial data set to view model list
-        private void Get()
-        {
-            // Get data
-            PrayerRequestBusinessLayer prayer = new PrayerRequestBusinessLayer();
-            List<PrayerRequest> prayers = prayer.GetPrayers();
-
-            // Assign to view & viewmodel list
-            foreach (PrayerRequest p in prayers)
-            {
-                prayerRequestViewModelList.Add(new PrayerRequestViewModel()
-                {
-                    ID = p.ID,
-                    PrayerText = p.PrayerText,
-                    Answered = p.Answered,
-                    SubmittedBy = p.SubmittedBy,
-                    SubmittedDate = p.SubmittedDate,
-                    IsNew = (DateTime.Compare(p.SubmittedDate, DateTime.Today) == 0)
-                });
-            }
-
-        } 
     }
 }

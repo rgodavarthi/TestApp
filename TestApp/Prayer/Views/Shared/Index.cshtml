@@ -1,5 +1,5 @@
 ﻿@using Prayer.View_Model;
-@model PrayerRequestListViewModel
+@model PrayerRequestViewModel
 
 @{
     ViewBag.Title = "";
@@ -19,7 +19,7 @@
             </div>
         <div class="panel-body">
             <div class="form-group">
-                @Html.TextAreaFor(m => m.PrayerRequest, 5, 0, new { @class = "form-control", style = "min-width: 100%" })
+                @Html.TextAreaFor(m => m.PrayerRequest, 5, 0, new { @class = "form-control", style = "min-width: 100%", name="prayerDesc" })
                 <label for="submittedBy">Submitted By</label>
                 @Html.TextBoxFor(m => m.SubmittedBy, new { @class = "form-control" })
             </div>
@@ -48,21 +48,19 @@
             </div>*@
         <div id="list">
             <h2>Most Recent Prayer Needs</h2>
-            <a href="http://www.google.com" id="test">Google</a>
-
-            <p>The last 10 prayer requests for your information</p>
-            <table class="table table-condensed table-bordered table-striped table-hover">
+            <table id="prayerTable" class="table table-condensed table-bordered table-striped table-hover">
                 <thead class="table">
                     <tr>
                         <th id="edit">Edit</th>
-                        <th>No.</th>
+                        <th class="hidden">No.</th>
                         <th>Name</th>
                         <th>Prayer Request</th>
                         <th>Date</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (PrayerRequestViewModel prayer in Model.GetPrayers)
+                    @foreach (PrayerRequestViewModel prayer in Model.PrayerRequestViewModelList)
                     {
                         if (@prayer.IsNew)
                         {
@@ -74,10 +72,17 @@
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
                                 </td>
-                                <td>@prayer.ID</td>
+                                <td class="hidden">@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
                                 <td>@prayer.SubmittedDate</td>
+                                <td>
+                                    <a href="#" data-action="delete"
+                                       data-id="@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                         }
                         else
@@ -90,10 +95,17 @@
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
                                 </td>
-                                <td>@prayer.ID</td>
+                                <td class="hidden">@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
                                 <td>@prayer.SubmittedDate</td>
+                                <td>
+                                    <a href="#" data-action="delete"
+                                       data-id="@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                         }
                     }
@@ -125,18 +137,26 @@
 
             // edit function
             $('table tbody a').click(function(){
-                //get and set Prayer-ID
-                $("#EventData").val("edit");
+                
+                if ($(this).attr("data-action") == "edit") {
 
-                $("#PrayerID").val($(this).attr("data-id"));
+                    $("#PrayerRequest").val($(this).closest('tr').find('td:eq(3)').text());
+                    $("#SubmittedBy").val($(this).closest('tr').find('td:eq(2)').text());
 
-                $("form").submit();
+                    $("#PrayerID").val($(this).attr("data-id"));
+                    $("#EventData").val($(this).attr("data-action"));
+                }
+
+                if ($(this).attr("data-action") == "delete") {
+
+                    $("#PrayerID").val($(this).attr("data-id"));
+                    $("#EventData").val("delete");
+
+                    $("form").submit();
+                }
+
             });
 
-            //// test function
-            //$("#test").click(function () {
-            //    alert("test");
-            //});
         });
     </script>
 }
