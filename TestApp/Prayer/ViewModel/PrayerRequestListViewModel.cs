@@ -8,10 +8,11 @@ namespace Prayer.View_Model
 {
     public class PrayerRequestListViewModel
     {
-        public List<PrayerRequestViewModel> GetPrayers { get; set;}
-        public string PrayerRequest { get; set; }
-        public string SubmittedBy { get; set; }
-        public string EventData { get; set; }
-        public string PrayerID { get; set; }
+        //public List<PrayerRequestViewModel> GetPrayers { get; set;}
+        //public string PrayerRequest { get; set; }
+        //public string SubmittedBy { get; set; }
+        //public string EventData { get; set; }
+        //public string PrayerID { get; set; }
+        //public string Mode { get; set; }
     }
 }

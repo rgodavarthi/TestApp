@@ -1,5 +1,5 @@
 ﻿@using Prayer.View_Model;
-@model PrayerRequestListViewModel
+@model PrayerRequestViewModel
 
 @{
     ViewBag.Title = "";
@@ -19,10 +19,9 @@
             </div>
         <div class="panel-body">
             <div class="form-group">
-                @Html.TextAreaFor(m => m.PrayerRequest, 5, 0, new { @class = "form-control", style = "min-width: 100%" })
+                @Html.TextAreaFor(m => m.PrayerRequest, 5, 0, new { @class = "form-control", style = "min-width: 100%", name="prayerDesc" })
                 <label for="submittedBy">Submitted By</label>
                 @Html.TextBoxFor(m => m.SubmittedBy, new { @class = "form-control" })
-                @*<input class="form-control" id="submittedBy" type="text" />*@
             </div>
         </div>
         <div class="panel-footer">
@@ -49,50 +48,64 @@
             </div>*@
         <div id="list">
             <h2>Most Recent Prayer Needs</h2>
-            <p>The last 10 prayer requests for your information</p>
-            <table class="table table-condensed table-bordered table-striped table-hover">
+            <table id="prayerTable" class="table table-condensed table-bordered table-striped table-hover">
                 <thead class="table">
                     <tr>
                         <th id="edit">Edit</th>
-                        <th>No.</th>
+                        <th class="hidden">No.</th>
                         <th>Name</th>
                         <th>Prayer Request</th>
                         <th>Date</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (PrayerRequestViewModel prayer in Model.GetPrayers)
+                    @foreach (PrayerRequestViewModel prayer in Model.PrayerRequestViewModelList)
                     {
                         if (@prayer.IsNew)
                         {
                             <tr class="alert-danger">
                                 <td>
-                                    <a href="#" data-pdsa-action="edit"
-                                       data-pdsa-val= "@prayer.ID"
+                                    <a href="#" data-action="edit"
+                                       data-id="@prayer.ID"
                                        class="btn btn-default btn-sm">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
                                 </td>
-                                <td>@prayer.ID</td>
+                                <td class="hidden">@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
                                 <td>@prayer.SubmittedDate</td>
+                                <td>
+                                    <a href="#" data-action="delete"
+                                       data-id="@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                         }
                         else
                         {
                             <tr class="alert-info">
                                 <td>
-                                    <a href="#" data-pdsa-action="edit"
-                                       data-pdsa-val= "@prayer.ID"
+                                    <a href="#" data-action="edit"
+                                       data-id="@prayer.ID"
                                        class="btn btn-default btn-sm">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
                                 </td>
-                                <td>@prayer.ID</td>
+                                <td class="hidden">@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
                                 <td>@prayer.PrayerText</td>
                                 <td>@prayer.SubmittedDate</td>
+                                <td>
+                                    <a href="#" data-action="delete"
+                                       data-id="@prayer.ID"
+                                       class="btn btn-default btn-sm">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                         }
                     }
@@ -122,15 +135,28 @@
                 $("form").submit();
             });
 
-            //// edit function
-            //$("table").click(function () {
-            //    alert($(this).val("data-pdsa-val").text);
+            // edit function
+            $('table tbody a').click(function(){
                 
-            //    $("#PrayerID").val($(this).val("data-pdsa-val").text);
-            //    $("#EventData").val("edit");
+                if ($(this).attr("data-action") == "edit") {
 
-            //    $("form").submit();
-            //});
+                    $("#PrayerRequest").val($(this).closest('tr').find('td:eq(3)').text());
+                    $("#SubmittedBy").val($(this).closest('tr').find('td:eq(2)').text());
+
+                    $("#PrayerID").val($(this).attr("data-id"));
+                    $("#EventData").val($(this).attr("data-action"));
+                }
+
+                if ($(this).attr("data-action") == "delete") {
+
+                    $("#PrayerID").val($(this).attr("data-id"));
+                    $("#EventData").val("delete");
+
+                    $("form").submit();
+                }
+
+            });
+
         });
     </script>
 }
