@@ -8,6 +8,7 @@ namespace Prayer.View_Model
 {
     public class PrayerRequestViewModel
     {
+        // View model
         public int ID { get; set; }
         public string PrayerText { get; set; }
         public string SubmittedBy { get; set; }
@@ -15,7 +16,10 @@ namespace Prayer.View_Model
         public int Answered { get; set; }
         public bool IsNew { get; set; }
 
+        // prayer list
         public List<PrayerRequestViewModel> PrayerRequestViewModelList { get; set; }
+
+        // View binding variables
         public string PrayerRequest { get; set; }
         public string EventData { get; set; }
         public string PrayerID { get; set; }

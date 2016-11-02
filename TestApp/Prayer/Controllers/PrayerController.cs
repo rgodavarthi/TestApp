@@ -13,7 +13,10 @@ namespace Prayer.Controllers
     public class PrayerController : Controller
     {
 
+        // Initiatialize view model
         PrayerRequestViewModel vm = new PrayerRequestViewModel();
+
+        // random number for ID column
         Random rnd = new Random();
 
         // First entry point when you launch application
@@ -26,7 +29,7 @@ namespace Prayer.Controllers
             return View("Index", vm);
         }
 
-        // Entry point when you post - after adding a prayer request
+        // Entry point when you post - after add/edit/update/delete a prayer request
         [HttpPost]
         public ActionResult Default(PrayerRequestViewModel vml)
         {
@@ -38,6 +41,7 @@ namespace Prayer.Controllers
                 vm.PrayerRequestViewModelList = JsonConvert.DeserializeObject<List<PrayerRequestViewModel>>(data);
             }
             
+            // Handling prayer CRUD operations
             switch (vml.EventData.ToLower())
             { 
                 case "submit":               
