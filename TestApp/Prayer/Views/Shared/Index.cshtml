@@ -8,7 +8,7 @@
 @using (Html.BeginForm())
 { 
     <!-- Hidden fields-->
-    @Html.HiddenFor(m => m.EventData)
+    @Html.HiddenFor(m => m.Mode)
     @Html.HiddenFor(m => m.PrayerID)    
     
     <div class="container">
@@ -74,7 +74,7 @@
                                 </td>
                                 <td class="hidden">@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
-                                <td>@prayer.PrayerText</td>
+                                <td>@prayer.PrayerDescription</td>
                                 <td>@prayer.SubmittedDate</td>
                                 <td>
                                     <a href="#" data-action="delete"
@@ -97,7 +97,7 @@
                                 </td>
                                 <td class="hidden">@prayer.ID</td>
                                 <td>@prayer.SubmittedBy</td>
-                                <td>@prayer.PrayerText</td>
+                                <td>@prayer.PrayerDescription</td>
                                 <td>@prayer.SubmittedDate</td>
                                 <td>
                                     <a href="#" data-action="delete"
@@ -121,7 +121,7 @@
             $("#btnSubmit").on("click", function (e) {
                 e.preventDefault();
                 
-                $("#EventData").val("submit");
+                $("#Mode").val("submit");
 
                 $("form").submit();
             });
@@ -130,7 +130,7 @@
             $("#btnReset").on("click", function (e) {
                 e.preventDefault();
 
-                $("#EventData").val("reset");
+                $("#Mode").val("reset");
 
                 $("form").submit();
             });
@@ -138,19 +138,21 @@
             // edit function
             $('table tbody a').click(function(){
                 
+                // Edit - when they click edir row
                 if ($(this).attr("data-action") == "edit") {
 
                     $("#PrayerRequest").val($(this).closest('tr').find('td:eq(3)').text());
                     $("#SubmittedBy").val($(this).closest('tr').find('td:eq(2)').text());
 
                     $("#PrayerID").val($(this).attr("data-id"));
-                    $("#EventData").val($(this).attr("data-action"));
+                    $("#Mode").val($(this).attr("data-action"));
                 }
 
+                // Delete - when they click delete
                 if ($(this).attr("data-action") == "delete") {
 
                     $("#PrayerID").val($(this).attr("data-id"));
-                    $("#EventData").val("delete");
+                    $("#Mode").val("delete");
 
                     $("form").submit();
                 }

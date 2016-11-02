@@ -14,6 +14,7 @@ namespace Prayer.Controllers
     {
 
         // Initiatialize view model
+        // Send to view
         PrayerRequestViewModel vm = new PrayerRequestViewModel();
 
         // random number for ID column
@@ -24,7 +25,7 @@ namespace Prayer.Controllers
         {
             // Get initial data set
             vm.Get();
-
+            
             // Send to view
             return View("Index", vm);
         }
@@ -33,27 +34,32 @@ namespace Prayer.Controllers
         [HttpPost]
         public ActionResult Default(PrayerRequestViewModel vml)
         {
-           
-            // Deserialize json data to list
-            using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json"))
-            {
-                string data = sr.ReadToEnd();
-                vm.PrayerRequestViewModelList = JsonConvert.DeserializeObject<List<PrayerRequestViewModel>>(data);
-            }
-            
+            vm.Get();
+
             // Handling prayer CRUD operations
-            switch (vml.EventData.ToLower())
-            { 
-                case "submit":               
+            switch (vml.Mode.ToLower())
+            {
+                case "submit":
 
                     if (!string.IsNullOrEmpty(vml.PrayerRequest) && (string.IsNullOrEmpty(vml.PrayerID)))
                     {
+                        int randomNext = rnd.Next();
+
                         // Add new prayer request to the list
+                        vm.prayers.Add(new PrayerRequest()
+                        {
+                            ID = randomNext,
+                            PrayerDescription = vml.PrayerRequest,
+                            Answered = 0,
+                            SubmittedBy = vml.SubmittedBy,
+                            SubmittedDate = DateTime.Now,
+                        });
+
+                        // Add to view list
                         vm.PrayerRequestViewModelList.Add(new PrayerRequestViewModel()
                         {
-                            //ID = vm.PrayerRequestViewModelList.Count + 1,
-                            ID = rnd.Next(),
-                            PrayerText = vml.PrayerRequest,
+                            ID = randomNext,
+                            PrayerDescription = vml.PrayerRequest,
                             Answered = 0,
                             SubmittedBy = vml.SubmittedBy,
                             SubmittedDate = DateTime.Now,
@@ -66,11 +72,18 @@ namespace Prayer.Controllers
                     else if (!(string.IsNullOrEmpty(vml.PrayerID)))
                     {
                         // Update
-                        PrayerRequestViewModel vmEdit = vm.PrayerRequestViewModelList.Find(id => id.ID == Convert.ToInt32(vml.PrayerID));
-                        vmEdit.PrayerText = vml.PrayerRequest;
-                        vmEdit.SubmittedBy = vml.SubmittedBy;
-                        vmEdit.SubmittedDate = DateTime.Now;
-                        vmEdit.IsNew = true;
+                        PrayerRequest pr = vm.prayers.Find(id => id.ID == Convert.ToInt32(vml.PrayerID));
+                        pr.PrayerDescription = vml.PrayerRequest;
+                        pr.SubmittedBy = vml.SubmittedBy;
+                        pr.SubmittedDate = DateTime.Now;
+
+                        // Add to view list
+                        PrayerRequestViewModel pvm = vm.PrayerRequestViewModelList.Find(id => id.ID == Convert.ToInt32(vml.PrayerID));
+                        pvm.PrayerDescription = vml.PrayerRequest;
+                        pvm.Answered = 0;
+                        pvm.SubmittedBy = vml.SubmittedBy;
+                        pvm.SubmittedDate = DateTime.Now;
+                        pvm.IsNew = true;
 
                         // Save to json file
                         SavePrayerRequest();
@@ -83,6 +96,7 @@ namespace Prayer.Controllers
 
                 case "delete":
 
+                    vm.prayers.Remove(vm.prayers.Find(id => id.ID == Convert.ToInt32(vml.PrayerID)));
                     vm.PrayerRequestViewModelList.Remove(vm.PrayerRequestViewModelList.Find(id => id.ID == Convert.ToInt32(vml.PrayerID)));
                     SavePrayerRequest();
 
@@ -104,7 +118,7 @@ namespace Prayer.Controllers
         // Saves data to Json file
         private void SavePrayerRequest()
         {
-            System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json", JsonConvert.SerializeObject(vm.PrayerRequestViewModelList));
+            System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\PrayerData.json", JsonConvert.SerializeObject(vm.prayers));
         }
     }
 }
